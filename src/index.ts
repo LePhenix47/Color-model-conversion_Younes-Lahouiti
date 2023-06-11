@@ -15,6 +15,9 @@ const color: string = "#000000";
 
 const colorConverter: ColorConverter = new ColorConverter("HEX", color);
 
+/**
+ * Adds event listeners to the input container.
+ */
 function addInputContainerListeners(): void {
   const colorInput: HTMLInputElement = selectQuery(
     ".index__input--color"
@@ -24,12 +27,17 @@ function addInputContainerListeners(): void {
 }
 addInputContainerListeners();
 
+/**
+ * Handles the color input event.
+ * @param {Event} event - The input event object.
+ */
 function handleColorInput(event: Event) {
   const colorInput: HTMLInputElement = event.currentTarget as HTMLInputElement;
 
   setStyleProperty("--_input-color-bg", colorInput.value, colorInput);
 
   colorConverter.setNewColor(colorInput.value, "hex");
+
   let arrayOfColorModels: string[] = formatColorModelsArray(
     colorConverter.getAllColorModels()
   );
@@ -44,7 +52,12 @@ function handleColorInput(event: Event) {
   }
 }
 
-function formatColorModelsArray(arrayOfColorModels): string[] {
+/**
+ * Formats an array of color models.
+ * @param {unknown[]} arrayOfColorModels - The array of color models.
+ * @returns {string[]} - The formatted array of color models.
+ */
+function formatColorModelsArray(arrayOfColorModels: unknown[]): string[] {
   const copyOfColorModels: unknown[] | string[] =
     Array.from(arrayOfColorModels);
   for (let i = 0; i < copyOfColorModels.length; i++) {
