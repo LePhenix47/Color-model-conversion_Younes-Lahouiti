@@ -26,6 +26,7 @@
             --_input-color-bg: black;
 
             background-color: var(--_input-color-bg) !important;
+            outline: 2px solid var(--border-color) !important;
 
             position: relative;
             width: 100%;
@@ -63,8 +64,10 @@
             &:nth-child(2) {
                 background-color: var(--bg-primary);
                 border: 2px solid var(--border-color);
+                width: 80%;
             }
         }
-
     }
+
+
 }

@@ -27,12 +27,10 @@ addInputContainerListeners();
 function handleColorInput(event: Event) {
   const colorInput: HTMLInputElement = event.currentTarget as HTMLInputElement;
 
-  const formattedInputValue: string = formatText(colorInput.value, "uppercase");
+  setStyleProperty("--_input-color-bg", colorInput.value, colorInput);
 
-  setStyleProperty("--_input-color-bg", formattedInputValue, colorInput);
-
-  colorConverter.setNewColor(formattedInputValue, "hex");
-  let arrayOfColorModels = formatColorModelsArray(
+  colorConverter.setNewColor(colorInput.value, "hex");
+  let arrayOfColorModels: string[] = formatColorModelsArray(
     colorConverter.getAllColorModels()
   );
 
