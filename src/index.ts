@@ -2,37 +2,112 @@ import { log } from "./utils/functions/helper-functions/console.functions";
 
 //Web components
 import "./components/web-component.component";
-import { ColorConverter } from "./utils/classes/services/color-converter-service.class";
+// import { ColorConverter } from "@lephenix47/color-converter";
+import { ColorConverter } from "../node_modules/@lephenix47/color-converter/dist/lib/es6/index";
 import {
-  parseToJS,
-  stringifyToJSON,
-} from "./utils/functions/helper-functions/string.functions";
+  selectQuery,
+  selectQueryAll,
+  setStyleProperty,
+} from "./utils/functions/helper-functions/dom.functions";
+import { formatText } from "./utils/functions/helper-functions/string.functions";
 
-// const colorConverter = new ColorConverter("hex", "#406273");
+const color: string = "#000000";
 
-// const colorConverter = new ColorConverter("rgb", {
-//   red: 64,
-//   green: 98,
-//   blue: 115,
-// });
+const colorConverter: ColorConverter = new ColorConverter("HEX", color);
 
-// const colorConverter = new ColorConverter("hsl", {
-//   hue: 200,
-//   saturation: 28,
-//   lightness: 35,
-// });
+function addInputContainerListeners(): void {
+  const colorInput: HTMLInputElement = selectQuery(
+    ".index__input--color"
+  ) as HTMLInputElement;
 
-const colorConverter = new ColorConverter("hwb", {
-  hue: 200,
-  whiteness: 25,
-  blackness: 55,
-});
+  colorInput.addEventListener("input", handleColorInput);
+}
+addInputContainerListeners();
 
-// const colorConverter = new ColorConverter("hsv", {
-//   hue: 200,
-//   saturation: 44,
-//   value: 45,
-// });
+function handleColorInput(event: Event) {
+  const colorInput: HTMLInputElement = event.currentTarget as HTMLInputElement;
 
-log("Color to convert:", colorConverter.color);
-log(colorConverter.getAllColorModels());
+  const formattedInputValue: string = formatText(colorInput.value, "uppercase");
+
+  setStyleProperty("--_input-color-bg", formattedInputValue, colorInput);
+
+  colorConverter.setNewColor(formattedInputValue, "hex");
+  let arrayOfColorModels = formatColorModelsArray(
+    colorConverter.getAllColorModels()
+  );
+
+  const outputsArray: HTMLOutputElement[] = selectQueryAll(
+    ".index__output"
+  ) as HTMLOutputElement[];
+
+  for (let i = 0; i < outputsArray.length; i++) {
+    const output: HTMLOutputElement = outputsArray[i];
+    output.textContent = arrayOfColorModels[i];
+  }
+}
+
+function formatColorModelsArray(arrayOfColorModels): string[] {
+  const copyOfColorModels: unknown[] | string[] =
+    Array.from(arrayOfColorModels);
+  for (let i = 0; i < copyOfColorModels.length; i++) {
+    const colorModelValue: unknown = copyOfColorModels[i];
+
+    const isNull: boolean = colorModelValue === null;
+    if (isNull) {
+      copyOfColorModels[i] = "N/A";
+      continue;
+    }
+
+    const isRgb: boolean = colorModelValue.hasOwnProperty("red");
+    if (isRgb) {
+      const { red, green, blue } = colorModelValue as {
+        red: number;
+        green: number;
+        blue: number;
+      };
+      copyOfColorModels[i] = `rgb(${red}, ${green}, ${blue})`;
+    }
+
+    const isHsl: boolean = colorModelValue.hasOwnProperty("lightness");
+    if (isHsl) {
+      const { hue, saturation, lightness } = colorModelValue as {
+        hue: number;
+        saturation: number;
+        lightness: number;
+      };
+      copyOfColorModels[i] = `hsl(${hue}°, ${saturation}%, ${lightness}%)`;
+    }
+    const isHwb: boolean = colorModelValue.hasOwnProperty("whiteness");
+    if (isHwb) {
+      const { hue, whiteness, blackness } = colorModelValue as {
+        hue: number;
+        whiteness: number;
+        blackness: number;
+      };
+      copyOfColorModels[i] = `hwb(${hue}°, ${whiteness}%, ${blackness}%)`;
+    }
+
+    const isHsv: boolean = colorModelValue.hasOwnProperty("value");
+    if (isHsv) {
+      const { hue, saturation, value } = colorModelValue as {
+        hue: number;
+        saturation: number;
+        value: number;
+      };
+      copyOfColorModels[i] = `hsv(${hue}°, ${saturation}%, ${value}%)`;
+    }
+
+    const isCmyk: boolean = colorModelValue.hasOwnProperty("cyan");
+    if (isCmyk) {
+      const { cyan, magenta, yellow, key } = colorModelValue as {
+        cyan: number;
+        magenta: number;
+        yellow: number;
+        key: number;
+      };
+      copyOfColorModels[i] = `cmyk(${cyan}%, ${magenta}%, ${yellow}%, ${key}%)`;
+    }
+  }
+
+  return copyOfColorModels as string[];
+}

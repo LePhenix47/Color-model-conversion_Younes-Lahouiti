@@ -20,7 +20,7 @@
     <meta property="og:url" content="https://younes-portfolio-dev.vercel.app/" />
 
     <!-- Title -->
-    <title>Title</title>
+    <title>Color model conversion</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="./dist/style.css" />
@@ -39,11 +39,81 @@
 <body>
     <header class="header">
         <svg class="hide header__svg-filters"></svg>
-        <h1 class="header__title" title="Title">Title</h1>
+        <h1 class="header__title" title="Color model conversion">Color model conversion</h1>
     </header>
 
     <main class="index">
+        <section class="index__input-converter">
+            <label class="index__label" for="color-input">Choose a color: <br />
+                <input type="color" class="index__input index__input--color" id="color-input" />
+            </label>
 
+            <table class="index__table">
+                <thead class="index__table-header"></thead>
+                <tfoot class="index__table-footer"></tfoot>
+                <tbody class="index__table-body">
+                    <tr class="index__table-row">
+                        <td class="index__table-cell index__table-cell--name">
+                            <p>Name:</p>
+                        </td>
+                        <td class="index__table-cell index__table-cell--output index__table-cell--output-name">
+                            <output class="index__output">Black</output>
+                        </td>
+                    </tr>
+                    <tr class="index__table-row">
+                        <td class="index__table-cell index__table-cell--hex">
+                            <p>Hex:</p>
+                        </td>
+                        <td class="index__table-cell index__table-cell--output index__table-cell--output-hex">
+                            <output class="index__output">#000000</output>
+                        </td>
+                    </tr>
+                    <tr class="index__table-row">
+                        <td class="index__table-cell index__table-cell--rgb">
+                            <p>RGB:</p>
+                        </td>
+                        <td class="index__table-cell index__table-cell--output index__table-cell--output-rgb">
+                            <output class="index__output">rgb(0, 0, 0)</output>
+                        </td>
+                    </tr>
+                    <tr class="index__table-row">
+                        <td class="index__table-cell index__table-cell--hsl">
+                            <p>HSL:</p>
+                        </td>
+                        <td class="index__table-cell index__table-cell--output index__table-cell--output-hsl">
+                            <output class="index__output">hsl(0°, 0%, 0%)</output>
+                        </td>
+                    </tr>
+                    <tr class="index__table-row">
+                        <td class="index__table-cell index__table-cell--hsv">
+                            <p>HSV:</p>
+                        </td>
+                        <td class="index__table-cell index__table-cell--output index__table-cell--output-hsv">
+                            <output class="index__output">hsv(0°, 0%, 0%)</output>
+                        </td>
+                    </tr>
+                    <tr class="index__table-row">
+                        <td class="index__table-cell index__table-cell--hwb">
+                            <p>HWB:</p>
+                        </td>
+                        <td class="index__table-cell index__table-cell--output index__table-cell--output-hwb">
+                            <output class="index__output">hwb(0°, 0%, 100%)</output>
+                        </td>
+                    </tr>
+
+                    <tr class="index__table-row">
+                        <td class="index__table-cell index__table-cell--cmyk">
+                            <p>CMYK:</p>
+                        </td>
+                        <td class="index__table-cell index__table-cell--output index__table-cell--output-cmyk">
+                            <output class="index__output">cmyk(0%, 0%, 0%, 100%)</output>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </section>
+        <section class="index__select-converter"></section>
     </main>
     <footer class="footer">
         <p class="footer__paragraph">
