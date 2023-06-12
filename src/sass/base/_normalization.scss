@@ -359,21 +359,34 @@ input {
         }
 
         --_inner-spin-appearance: auto;
+        --_inner-spin-hover-cursor: pointer;
+
         --_outer-spin-appearance: auto;
+        --_outer-spin-hover-cursor: pointer;
 
         --_moz-appearance: initial;
 
         /*
-        Ignore the warning, this is to reset the input on Firefox
+            Ignore the warning, this is to reset the input on Firefox
         */
         -moz-appearance: var(--_moz-appearance);
 
         &::-webkit-inner-spin-button {
             appearance: var(--_inner-spin-appearance);
+
+            &:hover {
+                cursor: var(--_inner-spin-hover-cursor);
+            }
+
         }
 
         &::-webkit-outer-spin-button {
             appearance: var(--_outer-spin-appearance);
+
+            &:hover {
+                cursor: var(--_outer-spin-hover-cursor);
+            }
+
         }
     }
 
