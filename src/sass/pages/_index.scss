@@ -107,6 +107,12 @@
         @include input-styling(100%);
     }
 
+    &__color-model-container {
+        width: 100%;
+
+        display: flex;
+    }
+
     &__select-converter {
 
         &--label {

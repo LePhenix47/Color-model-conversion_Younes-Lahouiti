@@ -2,18 +2,19 @@ import { log } from "./utils/functions/helper-functions/console.functions";
 
 //Web components
 import "./components/web-component.component";
-// import { ColorConverter } from "@lephenix47/color-converter";
-import { ColorConverter } from "../node_modules/@lephenix47/color-converter/dist/lib/es6/index";
 import {
+  addClass,
+  getAncestor,
+  getClassListValues,
+  getParent,
+  removeClass,
   selectQuery,
   selectQueryAll,
-  setStyleProperty,
 } from "./utils/functions/helper-functions/dom.functions";
-import { formatText } from "./utils/functions/helper-functions/string.functions";
-
-const color: string = "#000000";
-
-const colorConverter: ColorConverter = new ColorConverter("HEX", color);
+import {
+  handleColorInput,
+  setInitialColorForConversion,
+} from "./utils/functions/event-listeners/select-event-listeners.functions";
 
 /**
  * Adds event listeners to the input container.
@@ -27,99 +28,77 @@ function addInputContainerListeners(): void {
 }
 addInputContainerListeners();
 
-/**
- * Handles the color input event.
- * @param {Event} event - The input event object.
- */
-function handleColorInput(event: Event) {
-  const colorInput: HTMLInputElement = event.currentTarget as HTMLInputElement;
+function addSelectContainerListeners(): void {
+  const selectFromColorModel: HTMLSelectElement = selectQuery(
+    ".index__select-converter--select-input"
+  ) as HTMLSelectElement;
 
-  setStyleProperty("--_input-color-bg", colorInput.value, colorInput);
+  selectFromColorModel.addEventListener("input", setInputColor);
 
-  colorConverter.setNewColor(colorInput.value, "hex");
+  const selectToColorModel: HTMLSelectElement = selectQuery(
+    ".index__select-converter--select-output"
+  ) as HTMLSelectElement;
 
-  let arrayOfColorModels: string[] = formatColorModelsArray(
-    colorConverter.getAllColorModels()
-  );
-
-  const outputsArray: HTMLOutputElement[] = selectQueryAll(
-    ".index__output"
-  ) as HTMLOutputElement[];
-
-  for (let i = 0; i < outputsArray.length; i++) {
-    2;
-    const output: HTMLOutputElement = outputsArray[i];
-    output.textContent = arrayOfColorModels[i];
-  }
+  selectToColorModel.addEventListener("input", setOutputColor);
 }
+addSelectContainerListeners();
 
-/**
- * Formats an array of color models.
- * @param {unknown[]} arrayOfColorModels - The array of color models.
- * @returns {string[]} - The formatted array of color models.
- */
-function formatColorModelsArray(arrayOfColorModels: unknown[]): string[] {
-  const copyOfColorModels: unknown[] | string[] =
-    Array.from(arrayOfColorModels);
-  for (let i = 0; i < copyOfColorModels.length; i++) {
-    const colorModelValue: unknown = copyOfColorModels[i];
+function setInputColor(event: Event) {
+  const select: HTMLSelectElement = event.currentTarget as HTMLSelectElement;
+  log(select, select.value);
 
-    const isNull: boolean = colorModelValue === null;
-    if (isNull) {
-      copyOfColorModels[i] = "N/A";
+  const containersParent: HTMLDivElement = getAncestor(
+    select,
+    ".index__select-converter--inputs"
+  ) as HTMLDivElement;
+
+  const classOfContainerToShow: string = `index__color-model-container--${select.value}`;
+  const inputContainersArray: HTMLDivElement[] = selectQueryAll(
+    ".index__color-model-container",
+    containersParent
+  ) as HTMLDivElement[];
+
+  let selectedColorInputsArray: HTMLInputElement[] = [];
+
+  let nonSelectedColorInputsArray: HTMLInputElement[] = [];
+
+  for (const inputDivContainer of inputContainersArray) {
+    const needsToBeShown: boolean = getClassListValues(
+      inputDivContainer
+    ).includes(classOfContainerToShow);
+
+    if (needsToBeShown) {
+      removeClass(inputDivContainer, "hide");
+      selectedColorInputsArray = selectQueryAll(
+        "input",
+        inputDivContainer
+      ) as HTMLInputElement[];
       continue;
     }
 
-    const isRgb: boolean = colorModelValue.hasOwnProperty("red");
-    if (isRgb) {
-      const { red, green, blue } = colorModelValue as {
-        red: number;
-        green: number;
-        blue: number;
-      };
-      copyOfColorModels[i] = `rgb(${red}, ${green}, ${blue})`;
-    }
-
-    const isHsl: boolean = colorModelValue.hasOwnProperty("lightness");
-    if (isHsl) {
-      const { hue, saturation, lightness } = colorModelValue as {
-        hue: number;
-        saturation: number;
-        lightness: number;
-      };
-      copyOfColorModels[i] = `hsl(${hue}°, ${saturation}%, ${lightness}%)`;
-    }
-    const isHwb: boolean = colorModelValue.hasOwnProperty("whiteness");
-    if (isHwb) {
-      const { hue, whiteness, blackness } = colorModelValue as {
-        hue: number;
-        whiteness: number;
-        blackness: number;
-      };
-      copyOfColorModels[i] = `hwb(${hue}°, ${whiteness}%, ${blackness}%)`;
-    }
-
-    const isHsv: boolean = colorModelValue.hasOwnProperty("value");
-    if (isHsv) {
-      const { hue, saturation, value } = colorModelValue as {
-        hue: number;
-        saturation: number;
-        value: number;
-      };
-      copyOfColorModels[i] = `hsv(${hue}°, ${saturation}%, ${value}%)`;
-    }
-
-    const isCmyk: boolean = colorModelValue.hasOwnProperty("cyan");
-    if (isCmyk) {
-      const { cyan, magenta, yellow, key } = colorModelValue as {
-        cyan: number;
-        magenta: number;
-        yellow: number;
-        key: number;
-      };
-      copyOfColorModels[i] = `cmyk(${cyan}%, ${magenta}%, ${yellow}%, ${key}%)`;
-    }
+    addClass(inputDivContainer, "hide");
+    nonSelectedColorInputsArray = selectQueryAll(
+      "input",
+      inputDivContainer
+    ) as HTMLInputElement[];
   }
 
-  return copyOfColorModels as string[];
+  for (const selectedInput of selectedColorInputsArray) {
+    selectedInput.addEventListener("input", (event: Event) => {
+      setInitialColorForConversion(event, selectedColorInputsArray);
+    });
+  }
+
+  for (const nonSelectedInput of nonSelectedColorInputsArray) {
+    nonSelectedInput.addEventListener("input", (event: Event) => {
+      setInitialColorForConversion(event, selectedColorInputsArray);
+    });
+  }
+}
+
+function setOutputColor(event: Event) {
+  const select: HTMLSelectElement = event.currentTarget as HTMLSelectElement;
+  log(select, select.value);
+
+  const parentContainer: HTMLDivElement = getParent(select) as HTMLDivElement;
 }

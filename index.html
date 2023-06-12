@@ -38,7 +38,7 @@
 
 <body>
     <header class="header">
-        <svg class="hide header__svg-filters"></svg>
+        <svg class=header__svg-filters"></svg>
         <h1 class="header__title" title="Color model conversion">Color model conversion</h1>
     </header>
 
@@ -121,53 +121,77 @@
                 <div class="index__select-converter--container index__select-converter--input-container">
                     <label for="select-input" class="index__label index__select-converter--label">Enter values</label>
                     <div class="index__select-converter--inputs">
-                        <input type="text" class="index__input index__select-converter--input index__input--hex"
-                            placeholder="Hexadecimal" />
-                        <input type="number" min="0" max="255"
-                            class="index__input index__select-converter--input index__input--rgb hide"
-                            placeholder="Red" />
-                        <input type="number" min="0" max="255"
-                            class="index__input index__select-converter--input index__input--rgb hide"
-                            placeholder="Green" />
-                        <input type="number" min="0" max="255"
-                            class="index__input index__select-converter--input index__input--rgb hide"
-                            placeholder="Blue" />
-                        <input type="number" min="0" max="360"
-                            class="index__input index__select-converter--input index__input--hsl index__input--hwb index__input--hsv hide"
-                            placeholder="Hue" />
-                        <input type="number" min="0" max="100"
-                            class="index__input index__select-converter--input index__input--hsl index__input--hsv hide"
-                            placeholder="Saturation" />
-                        <input type="number" min="0" max="100"
-                            class="index__input index__select-converter--input index__input--hsl hide"
-                            placeholder="Lightness" />
-                        <input type="number" min="0" max="100"
-                            class="index__input index__select-converter--input index__input--hwb hide"
-                            placeholder="Whiteness" />
-                        <input type="number" min="0" max="100"
-                            class="index__input index__select-converter--input index__input--hwb hide"
-                            placeholder="Blackness" />
-                        <input type="number" min="0" max="100"
-                            class="index__input index__select-converter--input index__input--hsv hide"
-                            placeholder="Value" />
-                        <input type="number" min="0" max="100"
-                            class="index__input index__input index__select-converter--input index__input--cmyk hide"
-                            placeholder="Cyan" />
-                        <input type="number" min="0" max="100"
-                            class="index__input index__input index__select-converter--input index__input--cmyk hide"
-                            placeholder="Magenta" />
-                        <input type="number" min="0" max="100"
-                            class="index__input index__input index__select-converter--input index__input--cmyk hide"
-                            placeholder="Yellow" />
-                        <input type="number" min="0" max="100"
-                            class="index__input index__input index__select-converter--input index__input--cmyk hide"
-                            placeholder="Key" />
-                        <input type="text"
-                            class="index__input index__input index__select-converter--input index__input--name hide"
-                            placeholder="Name" />
+                        <div class="index__color-model-container index__color-model-container--hex">
+                            <input type="text" class="index__input index__select-converter--input index__input--hex"
+                                placeholder="Hexadecimal" />
+                        </div>
+                        <div class="index__color-model-container index__color-model-container--rgb hide">
+                            <input type="number" min="0" max="255"
+                                class="index__input index__select-converter--input index__input--rgb" name="red"
+                                placeholder="Red" />
+                            <input type="number" min="0" max="255"
+                                class="index__input index__select-converter--input index__input--rgb" name="green"
+                                placeholder="Green" />
+                            <input type="number" min="0" max="255"
+                                class="index__input index__select-converter--input index__input--rgb" name="blue"
+                                placeholder="Blue" />
+                        </div>
+                        <div class="index__color-model-container index__color-model-container--hsl hide">
+                            <input type="number" min="0" max="360"
+                                class="index__input index__select-converter--input index__input--hsl" placeholder="Hue"
+                                name="hue" />
+                            <input type="number" min="0" max="100"
+                                class="index__input index__select-converter--input index__input--hsl"
+                                placeholder="Saturation" name="saturation" />
+                            <input type="number" min="0" max="100"
+                                class="index__input index__select-converter--input index__input--hsl"
+                                placeholder="Lightness" name="lightness" />
+                        </div>
+                        <div class="index__color-model-container index__color-model-container--hwb hide">
+                            <input type="number" min="0" max="360"
+                                class="index__input index__select-converter--input index__input--hwb" placeholder="Hue"
+                                name="hue" />
+
+                            <input type="number" min="0" max="100"
+                                class="index__input index__select-converter--input index__input--hwb"
+                                placeholder="Whiteness" name="whiteness" />
+                            <input type="number" min="0" max="100"
+                                class="index__input index__select-converter--input index__input--hwb"
+                                placeholder="Blackness" name="blackness" />
+                        </div>
+                        <div class="index__color-model-container index__color-model-container--hsv hide">
+                            <input type="number" min="0" max="360"
+                                class="index__input index__select-converter--input index__input--hsv" placeholder="Hue"
+                                name="hue" />
+                            <input type="number" min="0" max="100"
+                                class="index__input index__select-converter--input index__input--hsv"
+                                placeholder="Saturation" name="saturation" />
+                            <input type="number" min="0" max="100"
+                                class="index__input index__select-converter--input index__input--hsv"
+                                placeholder="Value" name="value" />
+                        </div>
+                        <div class="index__color-model-container index__color-model-container--cmyk hide">
+                            <input type="number" min="0" max="100"
+                                class="index__input index__input index__select-converter--input index__input--cmyk"
+                                placeholder="Cyan" name="cyan" />
+                            <input type="number" min="0" max="100"
+                                class="index__input index__input index__select-converter--input index__input--cmyk"
+                                placeholder="Magenta" name="magenta" />
+                            <input type="number" min="0" max="100"
+                                class="index__input index__input index__select-converter--input index__input--cmyk"
+                                placeholder="Yellow" name="yellow" />
+                            <input type="number" min="0" max="100"
+                                class="index__input index__input index__select-converter--input index__input--cmyk"
+                                placeholder="Key" name="key" />
+                        </div>
+                        <div class="index__color-model-container index__color-model-container--value hide"><input
+                                type="text"
+                                class="index__input index__input index__select-converter--input index__input--name"
+                                placeholder="Name" />
+                        </div>
                     </div>
-                    <select class="index__select index__select-converter--select" name="select-input"
-                        id="select-select">
+                    <select class="index__select index__select-converter--select index__select-converter--select-input"
+                        name="select-input" id="select-select">
                         <optgroup label="Additive Color Models">
                             <option value="hex">Hexadecimal</option>
                             <option value="rgb">Red Green Blue</option>
@@ -190,8 +214,8 @@
                 <div class="index__select-converter--container index__select-converter--output-container">
                     <h3 class="index__select-converter--result-title">Result</h3>
                     <output class="index__select-converter--output">#000000</output>
-                    <select class="index__select index__select-converter--select" name="select-input"
-                        id="select-select">
+                    <select class="index__select index__select-converter--select index__select-converter--select-output"
+                        name="select-output" id="select-select">
                         <optgroup label="Additive Color Models">
                             <option value="hex">Hexadecimal</option>
                             <option value="rgb">Red Green Blue</option>

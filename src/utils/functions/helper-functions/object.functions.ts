@@ -64,6 +64,20 @@ export function getObjectEntries(object: object): any[] {
   }
   return [];
 }
+/**
+ * Sets a property with the specified value on an object.
+ * @param {object} object - The object on which to set the property.
+ * @param {string} propertyToAdd - The name of the property to add.
+ * @param {*} valueOfProperty - The value to assign to the property.
+ * @returns {void}
+ */
+export function setObjectProperty(
+  object: object,
+  propertyToAdd: string,
+  valueOfProperty: any
+): void {
+  Object.defineProperty(object, propertyToAdd, { value: valueOfProperty });
+}
 
 /**
  * Update an array of objects by a specific property value while preserving the order of objects inside.
