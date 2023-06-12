@@ -112,3 +112,16 @@
 @mixin child-border-radius-simple($parent-radius, $child-gap) {
     border-radius: calc(#{$parent-radius} - #{$child-gap});
 }
+
+//Element specific
+@mixin input-styling($width: 80%) {
+    width: $width;
+
+    background-color: var(--bg-primary);
+
+    border: 2px solid var(--border-color);
+
+    padding: 15px;
+
+    font-size: 16px;
+}

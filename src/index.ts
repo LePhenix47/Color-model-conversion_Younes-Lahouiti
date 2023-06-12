@@ -47,6 +47,7 @@ function handleColorInput(event: Event) {
   ) as HTMLOutputElement[];
 
   for (let i = 0; i < outputsArray.length; i++) {
+    2;
     const output: HTMLOutputElement = outputsArray[i];
     output.textContent = arrayOfColorModels[i];
   }
