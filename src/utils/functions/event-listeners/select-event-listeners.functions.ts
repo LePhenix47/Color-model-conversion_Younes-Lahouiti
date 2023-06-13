@@ -10,7 +10,12 @@ import {
   setStyleProperty,
 } from "../helper-functions/dom.functions";
 import { ColorConverter } from "../../../../node_modules/@lephenix47/color-converter/dist/lib/es6/index";
-import { log } from "../helper-functions/console.functions";
+import {
+  error,
+  group,
+  groupEnd,
+  log,
+} from "../helper-functions/console.functions";
 import { max, min } from "../helper-functions/math.functions";
 import { setObjectProperty } from "../helper-functions/object.functions";
 import { sliceString, splitString } from "../helper-functions/string.functions";
@@ -74,7 +79,6 @@ export function setInputColor(event: Event) {
 
 export function setOutputColor(event: Event) {
   const select: HTMLSelectElement = event.currentTarget as HTMLSelectElement;
-  log(select, select.value);
 
   const parentContainer: HTMLDivElement = getParent(select) as HTMLDivElement;
 
@@ -84,9 +88,8 @@ export function setOutputColor(event: Event) {
   ) as HTMLOutputElement;
 
   const inputHexValue: string = parentContainer.dataset.colorValue;
-  const convertedValue = colorConverter.convertTo(select.value);
 
-  log(inputHexValue);
+  const convertedValue = colorConverter.convertTo(select.value);
 
   setOutputValue(output, select.value, convertedValue);
 }
@@ -232,45 +235,63 @@ export function setInitialColorForConversion(
     setObjectProperty(color as object, colorProperty, inputValue);
   }
 
-  colorConverter.setNewColor(color as any, colorModel);
+  //Turn this unto a function
+  checkColorConversionErrors(color, colorModel, parentDiv);
+}
 
-  const convertFromDiv: HTMLDivElement = getAncestor(
+function checkColorConversionErrors(
+  color: object | string,
+  colorModel: string,
+  parentDiv: HTMLDivElement
+) {
+  const ancestorContainer = getAncestor(
     parentDiv,
-    ".index__select-converter--input-container"
-  ) as HTMLDivElement;
-
-  log(convertFromDiv);
-
-  const beforeAfterConversionContainer: HTMLDivElement = getParent(
-    convertFromDiv
-  ) as HTMLDivElement;
-  log(beforeAfterConversionContainer);
-
-  const convertToDiv: HTMLDivElement = selectQuery(
-    ".index__select-converter--output-container",
-    beforeAfterConversionContainer
-  ) as HTMLDivElement;
-
-  const selectToColorElement: HTMLSelectElement = selectQuery(
-    "select",
-    convertToDiv
-  ) as HTMLSelectElement;
-
-  const hexColor: string = sliceString(
-    colorConverter.convertTo("hex") as string,
-    1
+    ".index__select-converter--container"
   );
 
-  modifyAttribute("data-color-value", hexColor as string, convertToDiv);
+  removeClass(ancestorContainer, "invalid");
 
-  const output: HTMLOutputElement = selectQuery(
-    "output",
-    convertToDiv
-  ) as HTMLOutputElement;
+  try {
+    colorConverter.setNewColor(color as any, colorModel);
 
-  const convertedValue = colorConverter.convertTo(selectToColorElement.value);
+    const convertFromDiv: HTMLDivElement = getAncestor(
+      parentDiv,
+      ".index__select-converter--input-container"
+    ) as HTMLDivElement;
 
-  setOutputValue(output, selectToColorElement.value, convertedValue);
+    const beforeAfterConversionContainer: HTMLDivElement = getParent(
+      convertFromDiv
+    ) as HTMLDivElement;
+
+    const convertToDiv: HTMLDivElement = selectQuery(
+      ".index__select-converter--output-container",
+      beforeAfterConversionContainer
+    ) as HTMLDivElement;
+
+    const selectToColorElement: HTMLSelectElement = selectQuery(
+      "select",
+      convertToDiv
+    ) as HTMLSelectElement;
+
+    const output: HTMLOutputElement = selectQuery(
+      "output",
+      convertToDiv
+    ) as HTMLOutputElement;
+
+    let hexColor: string = sliceString(
+      colorConverter.convertTo("hex") as string,
+      1
+    );
+
+    modifyAttribute("data-color-value", hexColor as string, convertToDiv);
+
+    let convertedValue = colorConverter.convertTo(selectToColorElement.value);
+    setOutputValue(output, selectToColorElement.value, convertedValue);
+  } catch (conversionError) {
+    error(conversionError);
+    addClass(ancestorContainer, "invalid");
+    log("there was an error", ancestorContainer);
+  }
 }
 
 export function setOutputValue(

@@ -20,6 +20,8 @@ import {
 
 /**
  * Adds event listeners to the input container.
+ *
+ * @returns {void}
  */
 function addInputContainerListeners(): void {
   const colorInput: HTMLInputElement = selectQuery(
@@ -30,6 +32,11 @@ function addInputContainerListeners(): void {
 }
 addInputContainerListeners();
 
+/**
+ * Adds event listeners to the individual inputs select container.
+ *
+ * @returns {void}
+ */
 function addSelectContainerListeners(): void {
   const hexTextInput: HTMLInputElement = selectQuery(
     ".index__input--hex"

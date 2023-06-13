@@ -150,6 +150,10 @@
 
             border: 2px solid var(--border-color);
             border-radius: var(--border-radius);
+
+            &.invalid {
+                border: 2px solid red;
+            }
         }
 
         &--input-container {}
