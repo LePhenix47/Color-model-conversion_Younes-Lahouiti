@@ -119,10 +119,11 @@
         <section class="index__select-converter">
             <div class="index__input-output-container">
                 <div class="index__select-converter--container index__select-converter--input-container">
-                    <label for="select-input" class="index__label index__select-converter--label">Enter values</label>
+                    <h3 class="index__select-converter--result-title">Enter values</h3>
                     <div class="index__select-converter--inputs">
                         <div class="index__color-model-container index__color-model-container--hex">
-                            <input type="text" class="index__input index__select-converter--input index__input--hex"
+                            <input type="text" value="000000"
+                                class="index__input index__select-converter--input index__input--hex"
                                 placeholder="Hexadecimal" />
                         </div>
                         <div class="index__color-model-container index__color-model-container--rgb hide">
@@ -184,8 +185,8 @@
                                 class="index__input index__input index__select-converter--input index__input--cmyk"
                                 placeholder="Key" name="key" />
                         </div>
-                        <div class="index__color-model-container index__color-model-container--value hide"><input
-                                type="text"
+                        <div class="index__color-model-container index__color-model-container--name hide">
+                            <input type="text"
                                 class="index__input index__input index__select-converter--input index__input--name"
                                 placeholder="Name" />
                         </div>
@@ -211,7 +212,8 @@
                 </div>
                 <p class="index__equal-sign">=</p>
 
-                <div class="index__select-converter--container index__select-converter--output-container">
+                <div class="index__select-converter--container index__select-converter--output-container"
+                    data-color-value="000000">
                     <h3 class="index__select-converter--result-title">Result</h3>
                     <output class="index__select-converter--output">#000000</output>
                     <select class="index__select index__select-converter--select index__select-converter--select-output"

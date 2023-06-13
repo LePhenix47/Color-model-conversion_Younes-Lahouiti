@@ -1,7 +1,10 @@
 import {
+  addClass,
   getAncestor,
   getClassListValues,
   getParent,
+  modifyAttribute,
+  removeClass,
   selectQuery,
   selectQueryAll,
   setStyleProperty,
@@ -15,6 +18,78 @@ import { sliceString, splitString } from "../helper-functions/string.functions";
 const color: string = "#000000";
 
 const colorConverter: ColorConverter = new ColorConverter("HEX", color);
+
+export function setInputColor(event: Event) {
+  const select: HTMLSelectElement = event.currentTarget as HTMLSelectElement;
+  log(select, select.value);
+
+  const containersParent: HTMLDivElement = getAncestor(
+    select,
+    ".index__select-converter--inputs"
+  ) as HTMLDivElement;
+
+  const classOfContainerToShow: string = `index__color-model-container--${select.value}`;
+  const inputContainersArray: HTMLDivElement[] = selectQueryAll(
+    ".index__color-model-container",
+    containersParent
+  ) as HTMLDivElement[];
+
+  let selectedColorInputsArray: HTMLInputElement[] = [];
+
+  let nonSelectedColorInputsArray: HTMLInputElement[] = [];
+
+  for (const inputDivContainer of inputContainersArray) {
+    const needsToBeShown: boolean = getClassListValues(
+      inputDivContainer
+    ).includes(classOfContainerToShow);
+
+    if (needsToBeShown) {
+      removeClass(inputDivContainer, "hide");
+      selectedColorInputsArray = selectQueryAll(
+        "input",
+        inputDivContainer
+      ) as HTMLInputElement[];
+      continue;
+    }
+
+    addClass(inputDivContainer, "hide");
+    nonSelectedColorInputsArray = selectQueryAll(
+      "input",
+      inputDivContainer
+    ) as HTMLInputElement[];
+  }
+
+  for (const selectedInput of selectedColorInputsArray) {
+    selectedInput.addEventListener("input", (event: Event) => {
+      setInitialColorForConversion(selectedColorInputsArray);
+    });
+  }
+
+  for (const nonSelectedInput of nonSelectedColorInputsArray) {
+    nonSelectedInput.addEventListener("input", (event: Event) => {
+      setInitialColorForConversion(selectedColorInputsArray);
+    });
+  }
+}
+
+export function setOutputColor(event: Event) {
+  const select: HTMLSelectElement = event.currentTarget as HTMLSelectElement;
+  log(select, select.value);
+
+  const parentContainer: HTMLDivElement = getParent(select) as HTMLDivElement;
+
+  const output: HTMLOutputElement = selectQuery(
+    "output",
+    parentContainer
+  ) as HTMLOutputElement;
+
+  const inputHexValue: string = parentContainer.dataset.colorValue;
+  const convertedValue = colorConverter.convertTo(select.value);
+
+  log(inputHexValue);
+
+  setOutputValue(output, select.value, convertedValue);
+}
 
 /**
  * Handles the color input event.
@@ -113,7 +188,6 @@ function formatColorModelsArray(arrayOfColorModels: unknown[]): string[] {
 }
 
 export function setInitialColorForConversion(
-  event: Event,
   specificColorInputsArray: HTMLInputElement[]
 ) {
   let color: object | string = {};
@@ -159,7 +233,6 @@ export function setInitialColorForConversion(
   }
 
   colorConverter.setNewColor(color as any, colorModel);
-  log(colorConverter.color, colorConverter.convertTo("rgb"));
 
   const convertFromDiv: HTMLDivElement = getAncestor(
     parentDiv,
@@ -183,21 +256,88 @@ export function setInitialColorForConversion(
     convertToDiv
   ) as HTMLSelectElement;
 
+  const hexColor: string = sliceString(
+    colorConverter.convertTo("hex") as string,
+    1
+  );
+
+  modifyAttribute("data-color-value", hexColor as string, convertToDiv);
+
   const output: HTMLOutputElement = selectQuery(
     "output",
     convertToDiv
   ) as HTMLOutputElement;
 
-  const converterColorModel: string = selectToColorElement.value;
-  // const convertedValue
+  const convertedValue = colorConverter.convertTo(selectToColorElement.value);
 
-  log(selectToColorElement);
+  setOutputValue(output, selectToColorElement.value, convertedValue);
 }
 
-export function setWantedColorForConversion(
-  event: Event,
-  specificColorInputsArray: string
+export function setOutputValue(
+  output: HTMLOutputElement,
+  model: string,
+  convertedValue
 ) {
-  //   const input: HTMLInputElement = event.currentTarget as HTMLInputElement;
-  //   const colorType: string = input.name;
+  switch (model) {
+    case "name":
+    case "hex": {
+      //If we have a hex or name value
+      output.textContent = `${
+        !!(convertedValue as string)
+          ? (convertedValue as string)
+          : "Not available"
+      }`;
+      break;
+    }
+    case "rgb": {
+      const { red, green, blue } = convertedValue as {
+        red: number;
+        green: number;
+        blue: number;
+      };
+
+      output.textContent = `rgb(${red}, ${green}, ${blue})`;
+      break;
+    }
+    case "hsl": {
+      const { hue, saturation, lightness } = convertedValue as {
+        hue: number;
+        saturation: number;
+        lightness: number;
+      };
+      output.textContent = `hsl(${hue}°, ${saturation}%, ${lightness}%)`;
+      break;
+    }
+    case "hwb": {
+      const { hue, whiteness, blackness } = convertedValue as {
+        hue: number;
+        whiteness: number;
+        blackness: number;
+      };
+      output.textContent = `hwb(${hue}°, ${whiteness}%, ${blackness}%)`;
+      break;
+    }
+    case "hsv": {
+      const { hue, saturation, value } = convertedValue as {
+        hue: number;
+        saturation: number;
+        value: number;
+      };
+      output.textContent = `hsv(${hue}°, ${saturation}%, ${value}%)`;
+      break;
+    }
+    case "cmyk": {
+      const { cyan, magenta, yellow, key } = convertedValue as {
+        cyan: number;
+        magenta: number;
+        yellow: number;
+        key: number;
+      };
+      output.textContent = `cmyk(${cyan}%, ${magenta}%, ${yellow}%, ${key}%)`;
+      break;
+    }
+    default: {
+      break;
+    }
+  }
 }
