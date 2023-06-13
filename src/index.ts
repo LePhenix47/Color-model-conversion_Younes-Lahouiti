@@ -29,6 +29,14 @@ function addInputContainerListeners(): void {
 addInputContainerListeners();
 
 function addSelectContainerListeners(): void {
+  const hexTextInput: HTMLInputElement = selectQuery(
+    ".index__input--hex"
+  ) as HTMLInputElement;
+
+  hexTextInput.addEventListener("input", (event: Event) => {
+    setInitialColorForConversion(event, [hexTextInput]);
+  });
+
   const selectFromColorModel: HTMLSelectElement = selectQuery(
     ".index__select-converter--select-input"
   ) as HTMLSelectElement;

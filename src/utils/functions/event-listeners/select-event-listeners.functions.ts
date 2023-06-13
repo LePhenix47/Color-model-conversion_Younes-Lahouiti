@@ -1,6 +1,8 @@
 import {
+  getAncestor,
   getClassListValues,
   getParent,
+  selectQuery,
   selectQueryAll,
   setStyleProperty,
 } from "../helper-functions/dom.functions";
@@ -133,30 +135,63 @@ export function setInitialColorForConversion(
 
     if (isStringInput) {
       color = inputValue as string;
-    } else {
-      const minValue: number = Number(input.min);
-      const maxValue: number = Number(input.max);
-
-      const hasValueNotDefined: boolean = isNaN(inputValue as number);
-      if (hasValueNotDefined) {
-        input.value = (0).toString();
-      }
-      const overflows: boolean = (inputValue as number) > maxValue;
-      if (overflows) {
-        input.value = maxValue.toString();
-      }
-
-      const underflows: boolean = (inputValue as number) < minValue;
-      if (underflows) {
-        input.value = minValue.toString();
-      }
-
-      setObjectProperty(color as object, colorProperty, inputValue);
+      continue;
     }
+
+    const minValue: number = Number(input.min);
+    const maxValue: number = Number(input.max);
+
+    const hasValueNotDefined: boolean = isNaN(inputValue as number);
+    if (hasValueNotDefined) {
+      input.value = (0).toString();
+    }
+    const overflows: boolean = (inputValue as number) > maxValue;
+    if (overflows) {
+      input.value = maxValue.toString();
+    }
+
+    const underflows: boolean = (inputValue as number) < minValue;
+    if (underflows) {
+      input.value = minValue.toString();
+    }
+
+    setObjectProperty(color as object, colorProperty, inputValue);
   }
 
   colorConverter.setNewColor(color as any, colorModel);
   log(colorConverter.color, colorConverter.convertTo("rgb"));
+
+  const convertFromDiv: HTMLDivElement = getAncestor(
+    parentDiv,
+    ".index__select-converter--input-container"
+  ) as HTMLDivElement;
+
+  log(convertFromDiv);
+
+  const beforeAfterConversionContainer: HTMLDivElement = getParent(
+    convertFromDiv
+  ) as HTMLDivElement;
+  log(beforeAfterConversionContainer);
+
+  const convertToDiv: HTMLDivElement = selectQuery(
+    ".index__select-converter--output-container",
+    beforeAfterConversionContainer
+  ) as HTMLDivElement;
+
+  const selectToColorElement: HTMLSelectElement = selectQuery(
+    "select",
+    convertToDiv
+  ) as HTMLSelectElement;
+
+  const output: HTMLOutputElement = selectQuery(
+    "output",
+    convertToDiv
+  ) as HTMLOutputElement;
+
+  const converterColorModel: string = selectToColorElement.value;
+  // const convertedValue
+
+  log(selectToColorElement);
 }
 
 export function setWantedColorForConversion(
