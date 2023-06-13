@@ -24,7 +24,12 @@ const color: string = "#000000";
 
 const colorConverter: ColorConverter = new ColorConverter("HEX", color);
 
-export function setInputColor(event: Event) {
+/**
+ * Sets the input color based on the selected option.
+ * @param {Event} event - The event object.
+ * @returns {void}
+ */
+export function setInputColor(event: Event): void {
   const select: HTMLSelectElement = event.currentTarget as HTMLSelectElement;
   log(select, select.value);
 
@@ -77,7 +82,12 @@ export function setInputColor(event: Event) {
   }
 }
 
-export function setOutputColor(event: Event) {
+/**
+ * Sets the output color based on the selected option.
+ * @param {Event} event - The event object.
+ * @returns {void}
+ */
+export function setOutputColor(event: Event): void {
   const select: HTMLSelectElement = event.currentTarget as HTMLSelectElement;
 
   const parentContainer: HTMLDivElement = getParent(select) as HTMLDivElement;
@@ -97,8 +107,9 @@ export function setOutputColor(event: Event) {
 /**
  * Handles the color input event.
  * @param {Event} event - The input event object.
+ * @returns {void}
  */
-export function handleColorInput(event: Event) {
+export function handleColorInput(event: Event): void {
   const colorInput: HTMLInputElement = event.currentTarget as HTMLInputElement;
 
   setStyleProperty("--_input-color-bg", colorInput.value, colorInput);
@@ -190,9 +201,14 @@ function formatColorModelsArray(arrayOfColorModels: unknown[]): string[] {
   return copyOfColorModels as string[];
 }
 
+/**
+ * Sets the initial color for conversion.
+ * @param {HTMLInputElement[]} specificColorInputsArray - Array of specific color inputs.
+ * @returns {void}
+ */
 export function setInitialColorForConversion(
   specificColorInputsArray: HTMLInputElement[]
-) {
+): void {
   let color: object | string = {};
 
   const parentDiv: HTMLDivElement = getParent(
@@ -239,11 +255,18 @@ export function setInitialColorForConversion(
   checkColorConversionErrors(color, colorModel, parentDiv);
 }
 
+/**
+ * Checks for color conversion errors.
+ * @param {object | string} color - The color value or object.
+ * @param {string} colorModel - The color model.
+ * @param {HTMLDivElement} parentDiv - The parent div element.
+ * @returns {void}
+ */
 function checkColorConversionErrors(
   color: object | string,
   colorModel: string,
   parentDiv: HTMLDivElement
-) {
+): void {
   const ancestorContainer = getAncestor(
     parentDiv,
     ".index__select-converter--container"
@@ -294,11 +317,18 @@ function checkColorConversionErrors(
   }
 }
 
+/**
+ * Sets the output value based on the model and converted value.
+ * @param {HTMLOutputElement} output - The output element.
+ * @param {string} model - The color model.
+ * @param {*} convertedValue - The converted value.
+ * @returns {void}
+ */
 export function setOutputValue(
   output: HTMLOutputElement,
   model: string,
-  convertedValue
-) {
+  convertedValue: any
+): void {
   switch (model) {
     case "name":
     case "hex": {
