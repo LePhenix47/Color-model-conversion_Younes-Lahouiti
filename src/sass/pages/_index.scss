@@ -184,4 +184,42 @@
             text-align: center;
         }
     }
+
+
+
+    &__ad {
+        background-color: var(--npm-bg);
+        color: white;
+
+        border-radius: 100vmax;
+        padding: 10px 20px;
+
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        @include mobile-only {
+            flex-direction: column;
+        }
+    }
+
+    &__ad-image-container {}
+
+    &__ad-image {
+        height: 50px;
+    }
+
+    &__ad-text-container {}
+
+    &__ad-paragraph {
+        @include mobile-only {
+            text-align: center;
+        }
+    }
+
+
+    &__ad-link {
+        text-decoration: underline;
+    }
+
 }
